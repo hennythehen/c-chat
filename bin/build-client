@@ -1,0 +1,2 @@
+cd ../src/client
+gcc *.c *.h -o ../../bin/client

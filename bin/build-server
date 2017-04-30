@@ -1,0 +1,2 @@
+cd ../src/server
+gcc *.c *.h -o ../../bin/server -g
