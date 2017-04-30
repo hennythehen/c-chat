@@ -1,4 +1,4 @@
 #define TCPSERVER_H
 
-void serv_listen(int port);
+int server_run(int port);
 

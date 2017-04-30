@@ -6,6 +6,7 @@
 #include <netinet/ip.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <unistd.h>
 
 int serv_connect(char* ipaddr, int port)
 {
@@ -15,7 +16,6 @@ int serv_connect(char* ipaddr, int port)
     //create host address information
     host_addr_in.sin_family = AF_INET;
     host_addr_in.sin_port = htons(port);
-    printf("%u\n", ntohs(host_addr_in.sin_port));
 
     if (inet_aton(ipaddr, &host_addr_in.sin_addr) < 0) {
         perror("inet_aton"); exit(-1);
@@ -34,5 +34,20 @@ int serv_connect(char* ipaddr, int port)
                 addrlen) < 0) {
         perror("connect"); exit(-1);
     }
-    printf("port %d connected\n", port);
+
+    //child process listens for messages from server and prints them
+    if (fork() == 0) {
+        char rmsg[256];
+        while(1) {
+            read(sockfd, &rmsg, 256);
+            printf("Someone said: %s\n", rmsg);
+        }
+    }
+
+    char msg[256];
+    while (1) {
+        memset(&msg, 0, sizeof(msg));
+        scanf("%s", msg);
+        write(sockfd, &msg, 256);
+    }
 }
