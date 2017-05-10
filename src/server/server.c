@@ -64,6 +64,8 @@ int server_run(int port)
 
             post_msg(cl_list, msg_queue);
         }
+
+        exit(0);
     }
 
     /*
@@ -90,6 +92,7 @@ int server_run(int port)
                 read(client_fd, readbuff, 256);
                 new_msg(msg_queue, readbuff, client_fd);
                 signal(msg_lock_fd);
+                exit(0);
             }
         }
     }
